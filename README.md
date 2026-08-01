@@ -292,7 +292,16 @@ The APIs can be tested using:
 - Thunder Client
 
 > 📷 **Screenshots:** 
-<img width="1656" height="850" alt="Screenshot 2026-08-01 212411" src="https://github.com/user-attachments/assets/a17f3270-578e-4fe5-a505-4b038f28e604" />
+<img width="1162" height="880" alt="Screenshot 2026-08-01 212233" src="https://github.com/user-attachments/assets/02008e2d-c580-44a5-ac3b-72660ba24847" />
+<img width="1221" height="761" alt="Screenshot 2026-08-01 212251" src="https://github.com/user-attachments/assets/8b49cdb0-7479-45c7-b162-316bf6ac8680" />
+<img width="1377" height="827" alt="Screenshot 2026-08-01 212311" src="https://github.com/user-attachments/assets/fb2e3efe-0908-4d2f-bc44-26eb0da8e2dc" />
+<img width="1265" height="786" alt="Screenshot 2026-08-01 212319" src="https://github.com/user-attachments/assets/9a7f252c-5c07-4a92-9fb9-dd271fe8c574" />
+<img width="1250" height="780" alt="Screenshot 2026-08-01 212343" src="https://github.com/user-attachments/assets/9c126fb6-c169-40dc-8358-6860afcca418" />
+<img width="1656" height="850" alt="Screenshot 2026-08-01 212411" src="https://github.com/user-attachments/assets/893da16b-636a-4b88-b463-1a9d9adf3167" />
+
+
+
+
 
 
 
@@ -315,7 +324,7 @@ The APIs can be tested using:
 
 **Swapnil**
 
-Java Backend Developer | Spring Boot | PostgreSQL | REST APIs
+Java | Spring Boot | Spring Data JPA | Hibernate | PostgreSQL | Maven | ModelMapper | REST APIs
 
 ---
 
