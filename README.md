@@ -2,7 +2,7 @@
 
 > ⭐ **AI Note:** This README was created with AI assistance and carefully reviewed by the project author to accurately represent the implementation.
 
-A backend RESTful Bank Management System developed using **Java**, **Spring Boot**, **Spring Data JPA**, and **PostgreSQL**. The project simulates core banking operations such as customer management, account creation, deposits, withdrawals, fund transfers, and transaction history while following a layered architecture and REST API design.
+Developed a RESTful Digital Banking System that simulates core banking operations, including customer onboarding, account creation, branch management, deposits, withdrawals, fund transfers, and transaction history. The application follows a layered architecture with Controllers, Services, Repositories, DTOs, and Entity mapping, leveraging Spring Boot, Spring Data JPA, PostgreSQL, and ModelMapper to build a clean, maintainable, and scalable backend API.
 
 ---
 
