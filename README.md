@@ -1,4 +1,4 @@
-# 🏦 Bank Management System
+# 🏦 Digital Banking System
 
 > ⭐ **AI Note:** This README was created with AI assistance and carefully reviewed by the project author to accurately represent the implementation.
 
