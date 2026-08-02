@@ -2,6 +2,7 @@ package com.swapnil.bankmanagement.Controller;
 
 import com.swapnil.bankmanagement.Dto.CustomerDto;
 import com.swapnil.bankmanagement.Service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class CustomerController {
     private final CustomerService customerService;
     @PostMapping
-    public CustomerDto createCustomer(@RequestBody CustomerDto customerDto){
+    public CustomerDto createCustomer(@RequestBody @Valid CustomerDto customerDto){
         return customerService.createCustomer(customerDto);
     }
 
