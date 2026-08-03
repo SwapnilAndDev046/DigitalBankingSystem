@@ -1,7 +1,6 @@
 package com.swapnil.bankmanagement.Repository;
 
 import com.swapnil.bankmanagement.Entity.Customer;
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
