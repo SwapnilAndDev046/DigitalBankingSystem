@@ -22,7 +22,7 @@ public class Branch extends BaseEntity  {
     @Column(nullable = false)
     private String branchName;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false,unique = true,name = "ifsc_code")
     private String IFSC_CODE;
 
     @Column(nullable = false, unique = true)
