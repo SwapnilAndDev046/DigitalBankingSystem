@@ -36,7 +36,7 @@ public class AccountController {
     }
 
     @GetMapping("/balance")
-    String checkAccountBalance(@RequestParam("account-number")String accountNumber){
+    String checkAccountBalance(@RequestParam("accountNumber")String accountNumber){
         return accountService.checkAccountBalance(accountNumber);
     }
     @GetMapping("/account")
