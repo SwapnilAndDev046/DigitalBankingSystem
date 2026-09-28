@@ -28,37 +28,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 1. Get Authorization header
+        //Get Authorization header
         String authHeader = request.getHeader("Authorization");
 
-        // 2. If there is no Bearer token, continue normally
+        //If there is no Bearer token, continue normally
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);//move to next thing....
             return;
         }
 
-        // 3. Remove "Bearer " and keep only the JWT
+        //Remove "Bearer " and keep only the JWT
         String token = authHeader.substring(7);
 
         try {
 
-            // 4. Extract email from JWT
+            //Extract email from JWT
             String username = jwtService.extractUsername(token);
 
-            // 5. Only authenticate if no authentication already exists
+            //Only authenticate if no authentication already exists
             if (username != null
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                // 6. Load user from database
+                //Load user from database
                 UserDetails userDetails =
                         userDetailsService.loadUserByUsername(username);
-                System.out.println("USER: " + userDetails.getUsername());
-                System.out.println("ROLE: " + userDetails.getAuthorities());
 
-                // 7. Check whether JWT is valid for this user
+
+                //Check whether JWT is valid for this user
                 if (jwtService.validateToken(token, userDetails)) {
 
-                    // 8. Create Spring Security Authentication
+                    //Create Spring Security Authentication
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
@@ -66,14 +65,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     userDetails.getAuthorities()
                             );
 
-                    // 9. Put authentication into SecurityContext
+                    //Put authentication into SecurityContext
                     SecurityContextHolder
                             .getContext()
                             .setAuthentication(authentication);
                 }
             }
 
-            // 10. Continue the request
+            //Continue the request
             filterChain.doFilter(request, response);
 
         } catch (Exception exception) {
