@@ -728,7 +728,7 @@ Authorization: Bearer <JWT_TOKEN>
 
 Example:
 
-```markdown
+
 ![Login API](path/to/login-screenshot.png)
 
 ![Account Creation](path/to/account-screenshot.png)
@@ -740,7 +740,12 @@ Example:
 ![Transfer API](path/to/transfer-screenshot.png)
 
 ![Transaction History](path/to/transaction-history-screenshot.png)
-```
+
+<img width="410" height="682" alt="image" src="https://github.com/user-attachments/assets/49d6a93a-168f-4320-9e57-637bf4fbf718" />
+
+<img width="360" height="457" alt="image" src="https://github.com/user-attachments/assets/f0673fe3-dfa4-48fd-b8df-383051d5d14c" />
+
+
 
 ---
 
