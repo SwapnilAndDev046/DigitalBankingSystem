@@ -52,6 +52,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 6. Load user from database
                 UserDetails userDetails =
                         userDetailsService.loadUserByUsername(username);
+                System.out.println("USER: " + userDetails.getUsername());
+                System.out.println("ROLE: " + userDetails.getAuthorities());
 
                 // 7. Check whether JWT is valid for this user
                 if (jwtService.validateToken(token, userDetails)) {

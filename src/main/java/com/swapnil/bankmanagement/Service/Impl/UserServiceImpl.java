@@ -5,8 +5,10 @@ import com.swapnil.bankmanagement.Dto.SignupRequestDto;
 import com.swapnil.bankmanagement.Dto.SignupResponseDto;
 import com.swapnil.bankmanagement.Entity.AppUser;
 
+import com.swapnil.bankmanagement.Exception.CustomerNotFound;
 import com.swapnil.bankmanagement.Exception.UserAlreadyExists;
 import com.swapnil.bankmanagement.Repository.UserRepository;
+import com.swapnil.bankmanagement.Security.CurrentUserService;
 import com.swapnil.bankmanagement.Service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final CurrentUserService currentUserService;
 
 //    @Transactional
 //    @Override
@@ -59,10 +62,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public CustomerDto updateCustomer(CustomerDto customerDto, Long customerID) {
+    public CustomerDto updateCustomer(CustomerDto customerDto) {
         AppUser customer = userRepository
-                .findById(customerID)
-                .orElseThrow(()->new EntityNotFoundException("Customer not Found With ID: "+customerID));
+                .findByEmail(currentUserService.getCurrentUser().getEmail());
+
+        if (customer == null)
+            throw new CustomerNotFound("Customer not found");
+
 
         //Converting DTO to Existing Entity
         modelMapper.map(customerDto,customer);
@@ -75,10 +81,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public CustomerDto patchCustomer(Map<String, Object> entry, Long customerID) {
+    public CustomerDto patchCustomer(Map<String, Object> entry) {
         AppUser customer = userRepository
-                .findById(customerID)
-                .orElseThrow(()->new EntityNotFoundException("Customer Not Found With ID: "+customerID));
+                .findByEmail(currentUserService.getCurrentUser().getEmail());
+
+        if (customer == null)
+            throw new CustomerNotFound("User Not Found");
 
         entry.forEach((key,value)->{
                     switch (key){

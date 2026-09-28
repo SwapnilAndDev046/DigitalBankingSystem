@@ -40,46 +40,47 @@ public class SecurityConfig {
                                 "/api/v1/login"
                         ).permitAll()
 
-
-
-                        .requestMatchers(
-                                HttpMethod.DELETE,
-                                "/api/v1/customers/**",
-                                "/api/v1/accounts/**",
-                                "/api/v1/branches/**"
-                        ).hasAnyRole("ADMIN")
-
-                        .requestMatchers(
-                                HttpMethod.PUT,
-                                "/api/v1/accounts/**",
-                                "/api/v1/branches/**"
-                        ).hasRole("ADMIN")
-
-                        .requestMatchers(
-                                HttpMethod.PATCH,
-                                "/api/v1/branches/**"
-                        ).hasRole("ADMIN")
-
-
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/v1/branches/all"
-                        ).hasAnyRole("CUSTOMER","ADMIN")
+                        ).hasAnyRole("CUSTOMER", "ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/v1/customers/all",
                                 "/api/v1/customers/pagination",
-                                "/api/v1/accounts/all",
-                                "/api/v1/accounts/account"
-                        ).hasAnyRole("ADMIN")
+                                "/api/v1/accounts/all"
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.POST,
+                                "/api/v1/branches"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/v1/accounts/*",
+                                "/api/v1/branches/*"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/v1/branches/*"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/v1/customers/*",
+                                "/api/v1/accounts/*",
+                                "/api/v1/branches/*"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/accounts/create",
                                 "/api/v1/transactions/deposit",
                                 "/api/v1/transactions/withdraw",
-                                "/api/v1/transactions/transfer",
-                                "/api/v1/accounts/create"
+                                "/api/v1/transactions/transfer"
                         ).hasRole("CUSTOMER")
 
                         .requestMatchers(
@@ -93,15 +94,10 @@ public class SecurityConfig {
                         ).hasRole("CUSTOMER")
 
                         .requestMatchers(
-                                HttpMethod.POST,
-                                "/api/v1/branches"
-                        ).hasRole("ADMIN")
-
-                        .requestMatchers(
                                 HttpMethod.GET,
+                                "/api/v1/accounts/my-accounts",
                                 "/api/v1/accounts/*/balance",
-                                "/api/v1/transactions/*/history",
-                                "/api/v1/accounts/my-accounts"
+                                "/api/v1/transactions/*/history"
                         ).hasRole("CUSTOMER")
 
                         .anyRequest().authenticated()

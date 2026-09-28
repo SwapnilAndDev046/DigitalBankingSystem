@@ -13,8 +13,8 @@ public interface UserService {
 //    CustomerDto createCustomer(CustomerDto customerDto);
     String deleteCustomer(Long customerID);
     List<CustomerDto> getAllCustomers();
-    CustomerDto updateCustomer(CustomerDto customerDto,Long customerID);
-    CustomerDto patchCustomer(Map<String,Object> entry, Long customerID);
+    CustomerDto updateCustomer(CustomerDto customerDto);
+    CustomerDto patchCustomer(Map<String,Object> entry);
     Page<CustomerDto> getCustomersWithLimit(int page,int limit);
 
 }

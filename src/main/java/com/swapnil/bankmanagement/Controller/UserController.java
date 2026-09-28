@@ -14,10 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @PostMapping
-//    public CustomerDto createCustomer(@RequestBody @Valid CustomerDto customerDto){
-//        return userService.createCustomer(customerDto);
-//    }
+
 
     @DeleteMapping("/{id}")
     public String deleteCustomer(@PathVariable Long id){
@@ -29,14 +26,14 @@ public class UserController {
         return userService.getAllCustomers();
     }
 
-    @PutMapping("edits/{id}")
-    public CustomerDto updateCustomer(@RequestBody CustomerDto customerDto, @PathVariable Long id){
-        return userService.updateCustomer(customerDto,id);
+    @PutMapping("/edits")
+    public CustomerDto updateCustomer(@RequestBody CustomerDto customerDto){
+        return userService.updateCustomer(customerDto);
     }
 
-    @PatchMapping("edit/{id}")
-    public CustomerDto patchCustomer(@RequestBody Map<String,Object> entry, @PathVariable Long id){
-        return userService.patchCustomer(entry,id);
+    @PatchMapping("/edit")
+    public CustomerDto patchCustomer(@RequestBody Map<String,Object> entry){
+        return userService.patchCustomer(entry);
     }
 
     //http://localhost:8080/api/v1/customers/pagination?page=0&size=5 pagination
