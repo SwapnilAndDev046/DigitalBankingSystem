@@ -11,6 +11,7 @@ import com.swapnil.bankmanagement.Exception.InvalidAmount;
 import com.swapnil.bankmanagement.Exception.LowBalance;
 import com.swapnil.bankmanagement.Repository.AccountRepository;
 import com.swapnil.bankmanagement.Repository.TransactionRepository;
+import com.swapnil.bankmanagement.Security.CurrentUserService;
 import com.swapnil.bankmanagement.Service.TransactionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -34,6 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final ModelMapper modelMapper;
     private final AccountRepository accountRepository;
+    private final CurrentUserService currentUserService;
     SecureRandom secureRandom = new SecureRandom();
 
     @Transactional
@@ -43,16 +45,17 @@ public class TransactionServiceImpl implements TransactionService {
 
         //Account Number present or Not
         Account account = accountRepository
-                .findByAccountNumber(transactionOperationDto.getAccountNumber());
+                .findByAccountNumberAndCustomerEmail(
+                        transactionOperationDto.getAccountNumber(),
+                        this.currentUserService.getCurrentUser().getEmail())
+                .orElseThrow(() -> new AccountNotFound("Account Not Found"));
 
         //Exceptions
-        if (account == null)
-            throw new AccountNotFound("This Account Number Don't Exist");
         if (account.getStatus() == Status.CLOSED || account.getStatus() == Status.BLOCKED)
             throw new AccountNotActive("Account is Not Active");
 
         //Deposit Operation
-        account.setBalance(this.deposit(transactionOperationDto.getAmount(),account));
+        account.setBalance(this.deposit(transactionOperationDto.getAmount(), account));
         accountRepository.save(account);
 
         //InputDto -> Transaction
@@ -76,20 +79,21 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto withdrawMoney(TransactionOperationDto transactionOperationDto) {
         //Custom JPA Method
         Account account = accountRepository
-                .findByAccountNumber(transactionOperationDto.getAccountNumber());
+                .findByAccountNumberAndCustomerEmail(
+                        transactionOperationDto.getAccountNumber(),
+                        currentUserService.getCurrentUser().getEmail())
+                .orElseThrow(() -> new AccountNotFound("Account Not Found"));
 
         //Exceptions
-        if (account == null)
-            throw new AccountNotFound("Account Number Not Found");
         if (account.getStatus() == Status.BLOCKED || account.getStatus() == Status.CLOSED)
             throw new AccountNotActive("Account is Not Active");
 
-        account.setBalance(this.withdraw(transactionOperationDto.getAmount(),account));//this is optional
+        account.setBalance(this.withdraw(transactionOperationDto.getAmount(), account));//this is optional
         accountRepository.save(account);
 
 
         //InputDto -> Transaction
-        Transaction transaction = modelMapper.map(transactionOperationDto,Transaction.class);
+        Transaction transaction = modelMapper.map(transactionOperationDto, Transaction.class);
         transaction.setTransactionType(TransactionType.WITHDRAW);
         transaction.setAccount(account);
         transaction.setReferenceId(getRandomReference());
@@ -97,7 +101,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         //SavedTransaction -> outputDto
         TransactionDto transactionDto = new TransactionDto();
-        modelMapper.map(transaction,transactionDto);
+        modelMapper.map(transaction, transactionDto);
         transactionDto.setAccountId(account.getId());
         transactionDto.setNewBalance(account.getBalance());
         transactionDto.setAmount(transactionOperationDto.getAmount());
@@ -109,21 +113,29 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransferMoneyResultDto transferMoney(TransferMoneyDto transferMoneyDto) {
         Account senderAccount = accountRepository
-                .findByAccountNumber(transferMoneyDto.getSenderAccountNumber());
-        if (senderAccount == null)
-            throw new AccountNotFound("Account Not Found of Sender");
+                .findByAccountNumberAndCustomerEmail(
+                        transferMoneyDto.getSenderAccountNumber(),
+                        currentUserService.getCurrentUser().getEmail())
+                .orElseThrow(() -> new AccountNotFound("Account Not Found"));
+
 
         Account receiverAccount = accountRepository
                 .findByAccountNumber(transferMoneyDto.getReceiverAccountNumber());
         if (receiverAccount == null)
             throw new AccountNotFound("Account Not Found of Receiver");
 
+        if (receiverAccount.getStatus() == Status.BLOCKED || receiverAccount.getStatus() == Status.CLOSED)
+            throw new AccountNotActive("Account is not Active");
+
+        if (senderAccount.getStatus() == Status.BLOCKED || senderAccount.getStatus() == Status.CLOSED)
+            throw new AccountNotActive("Account is not Active");
+
         //Withdraw from sender
-        senderAccount.setBalance(this.withdraw(transferMoneyDto.getAmount(),senderAccount));
+        senderAccount.setBalance(this.withdraw(transferMoneyDto.getAmount(), senderAccount));
         accountRepository.save(senderAccount);
 
         //Deposit in receiver
-        receiverAccount.setBalance(this.deposit(transferMoneyDto.getAmount(),receiverAccount));
+        receiverAccount.setBalance(this.deposit(transferMoneyDto.getAmount(), receiverAccount));
         accountRepository.save(receiverAccount);
 
         //SenderTransaction Operation
@@ -157,11 +169,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     //TransactionHistory
     @Override
-    public List<TransactionHistoryDto> getAccountHistory(String accountNumber) {
+    public List<TransactionHistoryResponseDto> getAccountHistory(String accountNumber) {
+
         Account account = accountRepository
-                .findByAccountNumber(accountNumber);
-        if (account==null)
-            throw new AccountNotFound("Account Not Found");
+                .findByAccountNumberAndCustomerEmail(
+                        accountNumber,
+                        currentUserService.getCurrentUser().getEmail())
+                .orElseThrow(()-> new AccountNotFound("Account not Found"));
+
 
         //Jpa Method
         List<Transaction> transactions = transactionRepository
@@ -170,31 +185,31 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactions
                 .stream()
-                .map(n->modelMapper.map(n, TransactionHistoryDto.class))
+                .map(n -> modelMapper.map(n, TransactionHistoryResponseDto.class))
                 .toList();
     }
 
 
-    BigDecimal withdraw(BigDecimal amount,Account account){
+    BigDecimal withdraw(BigDecimal amount, Account account) {
         //Withdraw operation
         // big decimal compare a.compareTo(b) > 0 === a is big than b    a.compareTo(b) < 0 === a is small than b
-        if (amount.compareTo(BigDecimal.valueOf(0)) > 0){
-            if (amount.compareTo(account.getBalance()) < 0) {
+        if (amount.compareTo(BigDecimal.valueOf(0)) > 0) {
+            if (amount.compareTo(account.getBalance()) <= 0) {
                 return account.getBalance().subtract(amount);
-            }else {
+            } else {
                 throw new LowBalance("Balance is low");
             }
-        }else {
+        } else {
             throw new InvalidAmount("Amount Input is Invalid");
         }
     }
 
-    BigDecimal deposit(BigDecimal amount,Account account){
+    BigDecimal deposit(BigDecimal amount, Account account) {
         //Deposit operation
         // big decimal compare a.compareTo(b) > 0 === a is big than b    a.compareTo(b) < 0 === a is small than b
-        if (amount.compareTo(BigDecimal.valueOf(0)) > 0){
-                return account.getBalance().add(amount);
-        }else {
+        if (amount.compareTo(BigDecimal.valueOf(0)) > 0) {
+            return account.getBalance().add(amount);
+        } else {
             throw new InvalidAmount("Amount Input is Invalid");
         }
     }

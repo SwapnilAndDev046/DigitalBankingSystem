@@ -25,7 +25,7 @@ public class BranchController {
         return branchService.deleteBranch(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     List<BranchDto> getAllBranches(){
         return branchService.getAllBranches();
     }

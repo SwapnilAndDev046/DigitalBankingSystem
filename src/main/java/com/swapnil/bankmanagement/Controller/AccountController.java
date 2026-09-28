@@ -15,9 +15,14 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
 
-    @PostMapping
+    @PostMapping("/create")
     AccountDto createAccount(@RequestBody CreateAccountDto createAccountDto) {
         return accountService.createAccount(createAccountDto);
+    }
+
+    @GetMapping("/my-accounts")
+    List<AccountDto> myAllAccounts(){
+        return accountService.myAllAccounts();
     }
 
     @DeleteMapping("/{id}")
@@ -25,7 +30,7 @@ public class AccountController {
         return accountService.deleteAccount(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     List<AccountDto> getAllAccounts(){
         return accountService.getAllAccounts();
     }
@@ -35,13 +40,10 @@ public class AccountController {
         return accountService.updateAccount(updateAccountDto,id);
     }
 
-    @GetMapping("/balance")
-    String checkAccountBalance(@RequestParam("accountNumber")String accountNumber){
+    @GetMapping("/{accountNumber}/balance")
+    String checkAccountBalance(@PathVariable String accountNumber){
         return accountService.checkAccountBalance(accountNumber);
     }
-    @GetMapping("/account")
-    AccountDto findAccountByEmail(@RequestParam("email")String email){
-        return accountService.findAccountByEmail(email);
-    }
+
 
 }

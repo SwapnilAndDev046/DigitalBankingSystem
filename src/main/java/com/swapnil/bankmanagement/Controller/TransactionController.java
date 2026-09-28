@@ -29,9 +29,8 @@ private final TransactionService transactionService;
         return transactionService.transferMoney(transferMoneyDto);
     }
 
-    //RequestParam - http://localhost:8080/api/v1/transactions/account/history?account-number=348985258178
-    @GetMapping("/account/history")
-    List<TransactionHistoryDto> getAccountHistory(@RequestParam("accountNumber") String accountNumber){
+    @GetMapping("/{accountNumber}/history")
+    List<TransactionHistoryResponseDto> getAccountHistory(@PathVariable String accountNumber){
         return transactionService.getAccountHistory(accountNumber);
     }
 }

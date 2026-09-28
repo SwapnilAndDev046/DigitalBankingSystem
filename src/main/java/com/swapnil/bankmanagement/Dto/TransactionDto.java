@@ -17,6 +17,5 @@ public class TransactionDto {
     private Long accountId;
     private String referenceId;
 
-    public TransactionDto(TransactionType transactionType, BigDecimal amount, LocalDateTime transactionTime, Long id, String referenceId) {
-    }
+
 }

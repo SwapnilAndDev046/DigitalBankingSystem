@@ -6,10 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    @Query("Select a from Account a where a.AccountNumber =:AccountNumber")
-    Account findByAccountNumber(@Param("AccountNumber") String AccountNumber);
 
-    Account findByCustomerEmail(String email);
+    Account findByAccountNumber(@Param("accountNumber") String accountNumber);
+
+    List<Account> findByCustomerEmail(String email);
+
+    Optional<Account> findByAccountNumberAndCustomerEmail(String accountNumber, String email);
 }

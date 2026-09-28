@@ -8,5 +8,5 @@ public interface TransactionService {
     TransactionDto depositMoney(TransactionOperationDto transactionOperationDto);
     TransactionDto withdrawMoney(TransactionOperationDto transactionOperationDto);
     TransferMoneyResultDto transferMoney(TransferMoneyDto transferMoneyDto);
-    List<TransactionHistoryDto> getAccountHistory(String accountNumber);
+    List<TransactionHistoryResponseDto> getAccountHistory(String accountNumber);
 }

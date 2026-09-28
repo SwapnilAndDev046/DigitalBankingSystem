@@ -1,9 +1,13 @@
 package com.swapnil.bankmanagement.Service.Impl;
 
 import com.swapnil.bankmanagement.Dto.CustomerDto;
-import com.swapnil.bankmanagement.Entity.Customer;
-import com.swapnil.bankmanagement.Repository.CustomerRepository;
-import com.swapnil.bankmanagement.Service.CustomerService;
+import com.swapnil.bankmanagement.Dto.SignupRequestDto;
+import com.swapnil.bankmanagement.Dto.SignupResponseDto;
+import com.swapnil.bankmanagement.Entity.AppUser;
+
+import com.swapnil.bankmanagement.Exception.UserAlreadyExists;
+import com.swapnil.bankmanagement.Repository.UserRepository;
+import com.swapnil.bankmanagement.Service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,32 +23,32 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerServiceImpl implements CustomerService {
-    private final CustomerRepository customerRepository;
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @Transactional
-    @Override
-    public CustomerDto createCustomer(CustomerDto customerDto) {
-        Customer customer = modelMapper.map(customerDto,Customer.class);
-        Customer savedCustomer = customerRepository.save(customer);
-        return modelMapper.map(savedCustomer,CustomerDto.class);
-    }
+//    @Transactional
+//    @Override
+//    public CustomerDto createCustomer(CustomerDto customerDto) {
+//        AppUser customer = modelMapper.map(customerDto,Customer.class);
+//        AppUser savedCustomer = userRepository.save(customer);
+//        return modelMapper.map(savedCustomer,CustomerDto.class);
+//    }
 
     @Transactional
     @Override
     public String deleteCustomer(Long customerID) {
-        Customer customer = customerRepository
+        AppUser customer = userRepository
                 .findById(customerID)
                 .orElseThrow(()->new EntityNotFoundException("Customer Not Found With Id:"+customerID));
 
-        customerRepository.deleteById(customerID);
+        userRepository.deleteById(customerID);
         return "Customer Deleted With ID:"+customerID;
     }
 
     @Override
     public List<CustomerDto> getAllCustomers() {
-        List<CustomerDto> customers = customerRepository
+        List<CustomerDto> customers = userRepository
                 .findAll()
                 .stream()
                 .map(n->modelMapper.map(n,CustomerDto.class))
@@ -55,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public CustomerDto updateCustomer(CustomerDto customerDto, Long customerID) {
-        Customer customer = customerRepository
+        AppUser customer = userRepository
                 .findById(customerID)
                 .orElseThrow(()->new EntityNotFoundException("Customer not Found With ID: "+customerID));
 
@@ -63,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
         modelMapper.map(customerDto,customer);
 
         //Without .save() it won't get update in DB
-        Customer savedCustomer = customerRepository
+        AppUser savedCustomer = userRepository
                 .save(customer);
         return modelMapper.map(savedCustomer,CustomerDto.class);
     }
@@ -71,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public CustomerDto patchCustomer(Map<String, Object> entry, Long customerID) {
-        Customer customer = customerRepository
+        AppUser customer = userRepository
                 .findById(customerID)
                 .orElseThrow(()->new EntityNotFoundException("Customer Not Found With ID: "+customerID));
 
@@ -91,7 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
                     }
                 });
 
-        Customer savedCustomer = customerRepository
+        AppUser savedCustomer = userRepository
                 .save(customer);
 
         return modelMapper.map(savedCustomer,CustomerDto.class);
@@ -102,8 +107,9 @@ public class CustomerServiceImpl implements CustomerService {
     public Page<CustomerDto> getCustomersWithLimit(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
 
-        Page<Customer> customer = customerRepository.findCustomerWithLimit(pageable);
+        Page<AppUser> customer = userRepository.findCustomerWithLimit(pageable);
 
         return customer.map(n->modelMapper.map(n,CustomerDto.class));
     }
+
 }

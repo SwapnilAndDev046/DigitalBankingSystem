@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class TransactionHistoryDto {
+public class TransactionHistoryResponseDto {
     private BigDecimal amount;
     private Long accountId;
     private LocalDateTime transactionTime;

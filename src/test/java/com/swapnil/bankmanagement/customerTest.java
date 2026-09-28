@@ -1,9 +1,8 @@
 package com.swapnil.bankmanagement;
 
-import com.swapnil.bankmanagement.Dto.CustomerDto;
 import com.swapnil.bankmanagement.Repository.AccountRepository;
-import com.swapnil.bankmanagement.Repository.CustomerRepository;
-import com.swapnil.bankmanagement.Service.CustomerService;
+import com.swapnil.bankmanagement.Repository.UserRepository;
+import com.swapnil.bankmanagement.Service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class customerTest {
     @Autowired
-    private CustomerService customerService;
-    private CustomerRepository customerRepository;
+    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -24,7 +23,7 @@ public class customerTest {
 //                .email("swap@gmail.com")
 //                .phoneNumber("9292929292")
 //                .build();
-//        System.out.println(customerService.createCustomer(customerDto));
+//        System.out.println(userService.createCustomer(customerDto));
     }
 
     @Test

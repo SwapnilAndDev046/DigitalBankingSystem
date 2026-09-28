@@ -12,5 +12,5 @@ public interface AccountService {
     List<AccountDto> getAllAccounts();
     AccountDto updateAccount(UpdateAccountDto updateAccountDto, Long accountID);
     String checkAccountBalance(String accountNumber);
-    AccountDto findAccountByEmail(String email);
+    List<AccountDto> myAllAccounts();
 }

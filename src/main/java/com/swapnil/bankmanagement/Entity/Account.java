@@ -21,18 +21,17 @@ public class Account extends BaseEntity{
     private Long id;
 
     @Column(updatable = false,nullable = false, unique = true)
-    private String AccountNumber;
+    private String accountNumber;
 
     @Column
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
-    @Column(updatable = true)
-    private Status status;
+    private Status status = Status.ACTIVE;
 
     @ManyToOne
     @JoinColumn(name = "customer_id",nullable = false)
-    private Customer customer;
+    private AppUser customer;
 
     @ManyToOne
     @JoinColumn(nullable = false,name = "branch_id")
@@ -41,6 +40,7 @@ public class Account extends BaseEntity{
     @OneToMany(mappedBy = "account")
     @ToString.Exclude
     private List<Transaction> transactions = new ArrayList<>();
+
 
 
 }
