@@ -19,10 +19,10 @@ private final TransactionService transactionService;
         return transactionService.depositMoney(transactionOperationDto);
     }
 
-    @PostMapping("/withdraw")
-    TransactionDto withdrawMoney(@RequestBody TransactionOperationDto transactionOperationDto){
-        return transactionService.withdrawMoney(transactionOperationDto);
-    }
+//    @PostMapping("/withdraw")
+//    TransactionDto withdrawMoney(@RequestBody TransactionOperationDto transactionOperationDto){
+//        return transactionService.withdrawMoney(transactionOperationDto);
+//    }
 
     @PostMapping("/transfer")
     TransferMoneyResultDto transferMoney(@RequestBody TransferMoneyDto transferMoneyDto){

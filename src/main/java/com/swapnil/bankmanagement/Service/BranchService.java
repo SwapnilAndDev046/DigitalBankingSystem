@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface BranchService {
+
     BranchDto createBranch(BranchDto branchDto);
     String deleteBranch(Long branchID);
     List<BranchDto> getAllBranches();

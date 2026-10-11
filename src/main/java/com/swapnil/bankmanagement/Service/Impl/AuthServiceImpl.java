@@ -1,12 +1,10 @@
 package com.swapnil.bankmanagement.Service.Impl;
 
-import com.swapnil.bankmanagement.Dto.LoginRequestDto;
-import com.swapnil.bankmanagement.Dto.LoginResponseDto;
-import com.swapnil.bankmanagement.Dto.SignupRequestDto;
-import com.swapnil.bankmanagement.Dto.SignupResponseDto;
+import com.swapnil.bankmanagement.Dto.*;
 import com.swapnil.bankmanagement.Entity.AppUser;
 import com.swapnil.bankmanagement.Exception.UserAlreadyExists;
 import com.swapnil.bankmanagement.Repository.UserRepository;
+import com.swapnil.bankmanagement.Security.CurrentUserService;
 import com.swapnil.bankmanagement.Security.JwtService;
 import com.swapnil.bankmanagement.Service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final CurrentUserService currentUserService;
 
     @Transactional
     @Override
@@ -89,5 +88,15 @@ public class AuthServiceImpl implements AuthService {
 //                        "SPRING_SECURITY_CONTEXT",
 //                        context
 //                );
+    }
+
+    @Override
+    public CurrentUserResponse currentLogin() {
+        AppUser appUser = userRepository
+                .findByEmail(currentUserService
+                        .getCurrentUser()
+                        .getEmail());
+
+        return modelMapper.map(appUser,CurrentUserResponse.class);
     }
 }

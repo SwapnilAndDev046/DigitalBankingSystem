@@ -13,7 +13,8 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secretKey}") // this key is very important for signing the token
+    // this key is very important for signing the token
+    @Value("${jwt.secretKey}")
     private String jwtSecretKey;
 
     // 1 hour
@@ -42,6 +43,8 @@ public class JwtService {
                 .compact();
     }
 
+
+    // here we extract the userName from the token
     public String extractUsername(String token) {
 
         return Jwts
@@ -53,8 +56,8 @@ public class JwtService {
                 .getSubject();
     }
 
+    //It validates the token check whether it is expired or not
     public boolean validateToken(String token, UserDetails userDetails) {
-
         String username = extractUsername(token);
 
         return username.equals(userDetails.getUsername())

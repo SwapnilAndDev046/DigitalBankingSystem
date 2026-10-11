@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface UserRepository extends JpaRepository<AppUser, Long> {
     AppUser findByEmail(String email);
 
-    @Query(value = "SELECT * FROM customer",nativeQuery = true)
+    @Query(value = "SELECT * FROM customer c where c.role='CUSTOMER'",nativeQuery = true)
     Page<AppUser> findCustomerWithLimit(Pageable pageable);
 
 }
