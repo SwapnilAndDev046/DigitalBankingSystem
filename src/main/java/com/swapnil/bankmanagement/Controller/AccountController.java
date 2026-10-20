@@ -5,6 +5,7 @@ import com.swapnil.bankmanagement.Dto.CreateAccountDto;
 import com.swapnil.bankmanagement.Dto.UpdateAccountDto;
 import com.swapnil.bankmanagement.Service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,33 +17,33 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/create")
-    AccountDto createAccount(@RequestBody CreateAccountDto createAccountDto) {
-        return accountService.createAccount(createAccountDto);
+    public ResponseEntity<AccountDto> createAccount(@RequestBody CreateAccountDto createAccountDto) {
+        return ResponseEntity.ok(accountService.createAccount(createAccountDto));
     }
 
     @GetMapping("/my-accounts")
-    List<AccountDto> myAllAccounts(){
-        return accountService.myAllAccounts();
+    public ResponseEntity<List<AccountDto>> myAllAccounts(){
+        return ResponseEntity.ok(accountService.myAllAccounts());
     }
 
     @DeleteMapping("/{id}")
-    String deleteAccount(@PathVariable Long id){
-        return accountService.deleteAccount(id);
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+        return ResponseEntity.ok(accountService.deleteAccount(id));
     }
 
     @GetMapping("/all")
-    List<AccountDto> getAllAccounts(){
-        return accountService.getAllAccounts();
+    public ResponseEntity<List<AccountDto>> getAllAccounts(){
+        return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @PutMapping("/{id}")
-    AccountDto updateAccountStatus(@RequestBody UpdateAccountDto updateAccountDto, @PathVariable Long id){
-        return accountService.updateAccount(updateAccountDto,id);
+    public ResponseEntity<AccountDto> updateAccountStatus(@RequestBody UpdateAccountDto updateAccountDto, @PathVariable Long id){
+        return ResponseEntity.ok(accountService.updateAccount(updateAccountDto,id));
     }
 
     @GetMapping("/{accountNumber}/balance")
-    String checkAccountBalance(@PathVariable String accountNumber){
-        return accountService.checkAccountBalance(accountNumber);
+    public ResponseEntity<String> checkAccountBalance(@PathVariable String accountNumber){
+        return ResponseEntity.ok(accountService.checkAccountBalance(accountNumber));
     }
 
 

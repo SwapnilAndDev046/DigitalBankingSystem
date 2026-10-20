@@ -3,6 +3,7 @@ package com.swapnil.bankmanagement.Controller;
 import com.swapnil.bankmanagement.Dto.*;
 import com.swapnil.bankmanagement.Service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +16,8 @@ public class TransactionController {
 private final TransactionService transactionService;
 
     @PostMapping("/deposit")
-    TransactionDto depositMoney(@RequestBody TransactionOperationDto transactionOperationDto){
-        return transactionService.depositMoney(transactionOperationDto);
+    public ResponseEntity<TransactionDto> depositMoney(@RequestBody TransactionOperationDto transactionOperationDto){
+        return ResponseEntity.ok(transactionService.depositMoney(transactionOperationDto));
     }
 
 //    @PostMapping("/withdraw")
@@ -25,12 +26,12 @@ private final TransactionService transactionService;
 //    }
 
     @PostMapping("/transfer")
-    TransferMoneyResultDto transferMoney(@RequestBody TransferMoneyDto transferMoneyDto){
-        return transactionService.transferMoney(transferMoneyDto);
+    public ResponseEntity<TransferMoneyResultDto> transferMoney(@RequestBody TransferMoneyDto transferMoneyDto){
+        return ResponseEntity.ok(transactionService.transferMoney(transferMoneyDto));
     }
 
     @GetMapping("/{accountNumber}/history")
-    List<TransactionHistoryResponseDto> getAccountHistory(@PathVariable String accountNumber){
-        return transactionService.getAccountHistory(accountNumber);
+    public ResponseEntity<List<TransactionHistoryResponseDto>> getAccountHistory(@PathVariable String accountNumber){
+        return ResponseEntity.ok(transactionService.getAccountHistory(accountNumber));
     }
 }

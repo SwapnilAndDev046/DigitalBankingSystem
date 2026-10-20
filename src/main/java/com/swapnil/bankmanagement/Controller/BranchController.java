@@ -3,6 +3,7 @@ package com.swapnil.bankmanagement.Controller;
 import com.swapnil.bankmanagement.Dto.BranchDto;
 import com.swapnil.bankmanagement.Service.BranchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,27 +17,27 @@ public class BranchController {
     private final BranchService branchService;
 
     @PostMapping
-    BranchDto createBranch(@RequestBody BranchDto branchDto) {
-        return branchService.createBranch(branchDto);
+    public ResponseEntity<BranchDto> createBranch(@RequestBody BranchDto branchDto) {
+        return ResponseEntity.ok(branchService.createBranch(branchDto));
     }
 
     @DeleteMapping("/{id}")
-    String deleteBranch(@PathVariable Long id){
-        return branchService.deleteBranch(id);
+    public ResponseEntity<String> deleteBranch(@PathVariable Long id){
+        return ResponseEntity.ok(branchService.deleteBranch(id));
     }
 
     @GetMapping("/all")
-    List<BranchDto> getAllBranches(){
-        return branchService.getAllBranches();
+    public ResponseEntity<List<BranchDto>> getAllBranches(){
+        return ResponseEntity.ok(branchService.getAllBranches());
     }
 
     @PutMapping("/{id}")
-    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id){
-        return branchService.updateBranch(branchDto,id);
+    public ResponseEntity<BranchDto> updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id){
+        return ResponseEntity.ok(branchService.updateBranch(branchDto,id));
     }
 
     @PatchMapping("/{id}")
-    BranchDto partialUpdateBranch(@RequestBody Map<String,Object> branchDto, @PathVariable Long id){
-        return branchService.partialUpdateBranch(branchDto,id);
+    public ResponseEntity<BranchDto> partialUpdateBranch(@RequestBody Map<String,Object> branchDto, @PathVariable Long id){
+        return ResponseEntity.ok(branchService.partialUpdateBranch(branchDto,id));
     }
 }
